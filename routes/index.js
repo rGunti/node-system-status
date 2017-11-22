@@ -4,10 +4,11 @@
 
 let express = require('express');
 let router = express.Router();
+let HandleRender = require('../ui/handlebar-renderer');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'System Status' });
+router.get('/', function(req, res) {
+    HandleRender.render(res, 'index', 'System Status')
 });
 
 module.exports = router;

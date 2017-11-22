@@ -1,38 +1,67 @@
-<!-- NAV -->
-<div id="top" class="navbar-fixed">
-    <nav class="indigo darken-4 white-text" role="navigation">
-        <div class="nav-wrapper container">
-            <a href="#top" class="brand-logo">
-                Page Title
-            </a>
-            <a href="#" data-activates="mobile-demo" class="button-collapse">
-                <i class="material-icons">menu</i>
-            </a>
-            <ul class="right hide-on-med-and-down">
-            </ul>
-        </div>
-    </nav>
-</div>
+<ul class="collection">
+    <li class="collection-item avatar">
+        <i class="circle fa fa-cog fa-spin"></i>
+        <span class="title">Loading Service</span>
+        <p>
+            <b>{service_type}</b>,
+            last checked on <b>{last_checked_time}</b>
+        </p>
+        <p>
+            {service_description}
+        </p>
 
-<!-- Mobile Nav -->
-<ul class="side-nav" id="mobile-demo">
-    <li><div class="user-view">
-        <div class="background">
-            <img src="/img/background.png">
-        </div>
-        <a href="#!"><img class="circle" src="/img/profile.png"></a>
-        <a href="#!"><span class="white-text name">Username</span></a>
-        <a href="#!"><span class="white-text email">
-            Usermail
-        </span></a>
-    </div></li>
+        <a href="#!" class="disabled secondary-content grey-text"><i class="material-icons">info</i></a>
+    </li>
+    <li class="collection-item avatar">
+        <i class="circle green fa fa-check"></i>
+        <span class="title">Operational Service</span>
+        <p>
+            <b>{service_type}</b>,
+            last checked on <b>{last_checked_time}</b>
+        </p>
+        <p>
+            {service_description}
+        </p>
+
+        <a href="#!" class="secondary-content"><i class="material-icons">info</i></a>
+    </li>
+    <li class="collection-item avatar">
+        <i class="circle orange fa fa-exclamation-triangle"></i>
+        <span class="title">Operational Service with Warning</span>
+        <p>
+            <b>{service_type}</b>,
+            last checked on <b>{last_checked_time}</b>
+        </p>
+        <p>
+            {service_description}
+        </p>
+
+        <a href="#!" class="secondary-content"><i class="material-icons">info</i></a>
+    </li>
+    <li class="collection-item avatar">
+        <i class="circle red fa fa-remove"></i>
+        <span class="title">Failed Service</span>
+        <p>
+            <b>{service_type}</b>,
+            last checked on <b>{last_checked_time}</b>
+        </p>
+        <p>
+            {service_description}
+        </p>
+
+        <a href="#!" class="secondary-content"><i class="material-icons">info</i></a>
+    </li>
+    <li class="collection-item avatar grey-text">
+        <i class="circle fa fa-pause-circle"></i>
+        <span class="title">Disabled Service</span>
+        <p>
+            <b>{service_type}</b>,
+            last checked on <b>{last_checked_time}</b>
+        </p>
+        <p>
+            {service_description}
+        </p>
+
+        <a href="#!" class="secondary-content"><i class="material-icons">info</i></a>
+    </li>
 </ul>
-
-<!-- Footer -->
-<footer class="page-footer indigo darken-4">
-    <div class="footer-copyright">
-        <div class="container">
-            &COPY; 2017, Raphael Guntersweiler, All rights reserved!
-        </div>
-    </div>
-</footer>

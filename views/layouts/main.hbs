@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Page Title -->
+    <title>{{title}} - {{helpers.package.name}}</title>
+
+    <!-- META Info -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Style Import -->
+    <link rel="stylesheet" href="{{ROOT_DIR}}/public/css/material-design-icons.css">
+    <link rel="stylesheet" href="{{ROOT_DIR}}/public/css/materialize.min.css">
+    <link rel="stylesheet" href="{{ROOT_DIR}}/public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ROOT_DIR}}/public/css/style.css">
+</head>
+<body>
+    {{> nav}}
+
+    <div class="container">{{{body}}}</div>
+
+    {{> footer}}
+
+    <!-- JS Import -->
+    <script src="{{ROOT_DIR}}/public/js/jquery.min.js"></script>
+    <script src="{{ROOT_DIR}}/public/js/materialize.min.js"></script>
+    <script src="{{ROOT_DIR}}/public/js/custom.js"></script>
+</body>
+</html>
