@@ -1,0 +1,26 @@
+{
+  "youtube": {
+    "name": "YouTube",
+    "type": "http",
+    "enabled": true,
+    "url": "http://youtube.com"
+  },
+  "googlechrome": {
+    "name": "Google Chrome",
+    "type": "process",
+    "enabled": true,
+    "process": "chrome"
+  },
+  "mozillafirefox": {
+    "name": "Mozilla Firefox",
+    "type": "process",
+    "enabled": true,
+    "process": "firefox"
+  },
+  "postgresql": {
+    "name": "PostgeSQL",
+    "type": "service",
+    "enabled": true,
+    "service": "postgresql-x64-9.6"
+  }
+}

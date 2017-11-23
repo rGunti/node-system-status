@@ -10,6 +10,9 @@ let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 
+let ServiceChecker = require('./core/service-checker');
+ServiceChecker.init(require(process.env.SERVICES));
+
 let index = require('./routes/index');
 let app = express();
 

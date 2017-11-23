@@ -1,3 +1,18 @@
+<ul class="collection services">
+    {{#each data.services}}
+        <li id="service-{{@key}}" class="collection-item avatar">
+            <i class="circle fa"></i>
+            <span class="title">{{this.name}}</span>
+            <p>
+                {{this.type}}, <i>{{@key}}</i>
+            </p>
+
+            <a href="#!" class="secondary-content refresh-service" data-service="{{@key}}">
+                <i class="material-icons">refresh</i>
+            </a>
+        </li>
+    {{/each}}
+</ul>
 <ul class="collection">
     <li class="collection-item avatar">
         <i class="circle fa fa-cog fa-spin"></i>
