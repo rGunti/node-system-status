@@ -50,5 +50,15 @@
     "warningTimeout": 750,
     "interval": 15000,
     "category": "web"
+  },
+  "asdf": {
+    "name": "ASDF.xyz",
+    "type": "ping",
+    "enabled": "true",
+    "host": "asdf.xyz",
+    "timeout": 5000,
+    "warningTimeout": 750,
+    "interval": 15000,
+    "category": "web"
   }
 }

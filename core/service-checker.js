@@ -157,7 +157,9 @@ const ServiceChecker = {
         ping.promise.probe(service.host, { timeout: (service.timeout / 1000) || 10 })
             .then((response) => {
                 debug(`${service.name}: Ping response: Alive=${response.alive}, AvgTime=${response.avg}ms`);
-                if (callback) callback(null, (response.avg > service.warningTimeout) ? 'warning' : 'success', response);
+
+                let state = (response.alive) ? (response.avg > service.warningTimeout ? 'warning' : 'success') : 'error';
+                if (callback) callback(null, state, response);
             }).catch((err) => {
                 if (callback) callback(err, 'error');
             });

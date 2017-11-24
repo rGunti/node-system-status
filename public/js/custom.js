@@ -97,7 +97,8 @@ function setStatus(serviceLine, serviceData) {
                 break;
             case "ping":
                 if (serviceData.data) {
-                    additionalData.text('Average Ping: ' + Math.round(serviceData.data.avg) + ' ms');
+                    let avgPing = Math.round(serviceData.data.avg);
+                    additionalData.text('Average Ping: ' + (isNaN(avgPing) ? '---' : avgPing) + ' ms');
                 } else {
                     additionalData.text('...');
                 }
