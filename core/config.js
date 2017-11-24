@@ -18,7 +18,9 @@ let config = {
         TITLE: "title",
         SHORT_TITLE: "shortTitle",
         PORT: "port",
-        SERVICE_CONFIG: "services"
+        SERVICE_CONFIG: "services",
+        SERVICE_CATEGORIES: "serviceCategories",
+        SERVICE_DEFAULT_CATEGORY_INDEX: "defaultCategory"
     },
     init: function() {
         debug('Initializing Config ...');

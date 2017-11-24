@@ -10,6 +10,7 @@ let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let HandleRender = require('./ui/handlebar-renderer');
+let HandleHelpers = require('./ui/handlebar-helpers');
 let config = require('./core/config');
 
 let ServiceChecker = require('./core/service-checker');
@@ -20,11 +21,14 @@ let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.engine('hbs', hbs.express4({
+let hbsEngine = hbs.express4({
     defaultLayout: __dirname + '/views/layouts/main.hbs',
     partialsDir: __dirname + '/views/partials',
     layoutsDir: __dirname + '/views/layouts'
-}));
+});
+let hbhelpers = require('handlebars-helpers')({ handlebars: hbs.handlebars });
+HandleHelpers.registerHelperMethods(hbs.handlebars);
+app.engine('hbs', hbsEngine);
 app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public

@@ -15,11 +15,23 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
+const debug = require('debug')('node-system-status:HandlebarHelpers');
 const package = require(__dirname + '/../package.json');
 const config = require('../core/config');
 
 const HandlebarHelpers = {
     package: package,
-    config: config.items
+    config: config.items,
+    registeredMethods: {
+        getObjectValue: (object, options) => {
+            return options.fn(object[options.hash.key]);
+        }
+    },
+    registerHelperMethods: (hbs) => {
+        for (let key in HandlebarHelpers.registeredMethods) {
+            debug(`Registering Helper ${key} ...`);
+            hbs.registerHelper(key, HandlebarHelpers.registeredMethods[key]);
+        }
+    }
 };
 module.exports = HandlebarHelpers;

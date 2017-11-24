@@ -2,5 +2,24 @@
   "title": "System Status",
   "shortTitle": "Status",
   "port": 5000,
-  "services": "./config/services.json"
+  "services": "./config/services.json",
+  "serviceCategories": {
+    "ui": {
+      "name": "User Interfaces",
+      "icon": "fa-mobile"
+    },
+    "web": {
+      "name": "Web Services",
+      "icon": "fa-globe"
+    },
+    "terminal": {
+      "name": "Terminal Apps",
+      "icon": "fa-terminal"
+    },
+    "default": {
+      "name": "Others",
+      "icon": "fa-square"
+    }
+  },
+  "defaultCategory": "default"
 }

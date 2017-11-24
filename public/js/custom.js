@@ -6,15 +6,68 @@ const STATUS_INDICATOR_CLASSES = {
     'success': 'circle green fa fa-check',
     'warning': 'circle orange fa fa-exclamation-triangle',
     'error': 'circle red fa fa-remove',
-    'loading': 'circle fa fa-cog fa-spin',
+    'loading': 'circle indigo fa fa-cog fa-spin',
     'disabled': 'circle fa fa-pause-circle',
     'unknown': 'circle fa fa-question'
 };
+const BADGE_CLASSES = {
+    'warning': 'new badge orange',
+    'error': 'new badge red',
+    'success': 'new badge green',
+    'loading': 'new badge indigo',
+    'disabled': 'new badge grey',
+    'unknown': 'new badge grey'
+};
+const STATUS_LEVEL = {
+    'unknown': 0,
+    'disabled': 1,
+    'loading': 2,
+    'success': 3,
+    'warning': 4,
+    'error': 5
+};
+let categories = {};
+
+function getCategoryStatus(category) {
+    let maxLevel = 0;
+    let maxStatus = 'unknown';
+    for (let service in categories[category]) {
+        let state = categories[category][service];
+
+        if (maxLevel < STATUS_LEVEL[state]) {
+            maxStatus = state;
+            maxLevel = STATUS_LEVEL[state];
+        }
+    }
+    return maxStatus;
+}
+
+function setCategoryStatus(category) {
+    if (!category) return;
+    let status = getCategoryStatus(category);
+    console.log(category, status);
+    let badge = $('#category-' + category +'-badge');
+    badge.removeClass();
+    badge.addClass(BADGE_CLASSES[status]);
+}
+
+function setCachedServiceStatus(serviceName, categoryName, state) {
+    if (!(categoryName in categories)) {
+        categories[categoryName] = {};
+    }
+    categories[categoryName][serviceName] = state;
+}
 
 function setStatus(serviceLine, serviceData) {
     let statusIndicator = $('.circle', serviceLine);
     statusIndicator.removeClass();
     statusIndicator.addClass(STATUS_INDICATOR_CLASSES[serviceData.status]);
+    setCachedServiceStatus(
+        serviceLine.data('service'),
+        serviceData.service.category,
+        serviceData.status);
+    setCategoryStatus(serviceData.service.category);
+
 
     let lastUpdatedField = $('.service-last-updated', serviceLine);
     if (serviceData.lastUpdated) {
@@ -59,18 +112,21 @@ function setStatus(serviceLine, serviceData) {
 }
 
 function checkService(service) {
-    let statusIndicator = $('#service-' + service);
-    setStatus(statusIndicator, {status: 'loading'});
+    let serviceLine = $('#service-' + service);
+    let serviceCategory = serviceLine.parents().data('category');
+    setStatus(serviceLine, {status: 'loading', service:{category: serviceCategory}});
     $.ajax('/service/' + service + '/check')
         .done(function(d) {
             console.log(d);
-            setStatus(statusIndicator, d);
+            setStatus(serviceLine, d);
         }).fail(function(e) {
             console.log(e);
-            setStatus(statusIndicator, {
+            setStatus(serviceLine, {
                 status: 'unknown',
                 lastUpdated: new Date(),
-                service: null
+                service: {
+                    category: serviceCategory
+                }
             });
         });
 }

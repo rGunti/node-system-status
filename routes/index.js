@@ -6,11 +6,34 @@ let express = require('express');
 let router = express.Router();
 let HandleRender = require('../ui/handlebar-renderer');
 let ServiceChecker = require('../core/service-checker');
+let config = require('../core/config');
 
 /* GET home page. */
 router.get('/', function(req, res) {
     let services = ServiceChecker.services;
-    HandleRender.render(res, 'index', 'System Status', {services: services})
+    let categories = config.getValue(config.KEYS.SERVICE_CATEGORIES);
+    let defaultCategory = config.getValue(config.KEYS.SERVICE_DEFAULT_CATEGORY_INDEX);
+    let servicesByCategory = {};
+
+    for (let categoryKey in categories) {
+        servicesByCategory[categoryKey] = {
+            category: categories[categoryKey],
+            services: {},
+            serviceCount: () => { return Object.keys(this.services).length; }
+        };
+    }
+
+    for (let serviceKey in services) {
+        let service = services[serviceKey];
+        let serviceCategoryID = service.category || defaultCategory;
+        servicesByCategory[serviceCategoryID].services[serviceKey] = service;
+    }
+
+    HandleRender.render(res, 'index', 'System Status', {
+        services: services,
+        servicesByCategory: servicesByCategory,
+        categories: categories
+    })
 });
 router.get('/service/:service/check', (req, res) => {
     let serviceName = req.params.service;
