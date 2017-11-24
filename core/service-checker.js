@@ -133,6 +133,7 @@ const ServiceChecker = {
         ps.lookup({
             command: service.process,
             arguments: service.arguments,
+            psargs: 'aux'  // or else can't find processes which don't belong to the executing user
         }, (err, result) => {
             if (err) {
                 debug(`${service.name}: Service unavailable due to an error`);
