@@ -16,8 +16,10 @@
  *
  */
 const package = require(__dirname + '/../package.json');
+const config = require('../core/config');
 
 const HandlebarHelpers = {
-    package: package
+    package: package,
+    config: config.items
 };
 module.exports = HandlebarHelpers;

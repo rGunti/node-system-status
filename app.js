@@ -9,9 +9,11 @@ let favicon = require('serve-favicon');
 let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
+let HandleRender = require('./ui/handlebar-renderer');
+let config = require('./core/config');
 
 let ServiceChecker = require('./core/service-checker');
-ServiceChecker.init(require(process.env.SERVICES));
+ServiceChecker.init(require(config.getValue(config.KEYS.SERVICE_CONFIG)));
 
 let index = require('./routes/index');
 let app = express();
@@ -57,7 +59,7 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    HandleRender.render(res, 'error', 'Error');
 });
 
 module.exports = app;

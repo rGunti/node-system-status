@@ -1,0 +1,6 @@
+{
+  "title": "System Status",
+  "shortTitle": "Status",
+  "port": 5000,
+  "services": "./config/services.json"
+}
