@@ -1,20 +1,46 @@
-<ul class="collection services">
-    {{#each data.services}}
-        <li id="service-{{@key}}" class="collection-item avatar">
-            <i class="circle fa"></i>
-            <span class="title">{{this.name}}</span>
-            <!-- <p>{{this.type}}, <i>{{@key}}</i></p> -->
-            <p>
-                Last updated:
-                <b class="service-last-updated">unknown</b>
-                <small>(locally updated at <span class="service-last-updated-client">never</span>)</small>
-                <br>
-                <span class="service-additional-data"></span>
-            </p>
+<ul class="collapsible" data-collapsible="expandable">
+    {{#each data.servicesByCategory}}
+        <li>
+            <div class="collapsible-header indigo lighten-4">
+                {{#if this.category.icon}}
+                    <span class="fa fa-fw {{this.category.icon}}"></span>
+                    &nbsp;
+                {{/if}}
+                <b>{{this.category.name}}</b>
+                <span id="category-{{@key}}-badge" class="new badge" data-badge-caption="service(s)">
+                    {{length this.services}}
+                </span>
+            </div>
+            <div class="collapsible-body">
+                {{#if this.services}}
+                    <ul class="collection services"
+                        data-category="{{@key}}">
+                        {{#each this.services}}
+                            <li id="service-{{@key}}"
+                                data-service="{{@key}}"
+                                class="collection-item avatar">
+                                <i class="circle fa"></i>
+                                <span class="title">{{this.name}}</span>
+                                <!-- <p>{{this.type}}, <i>{{@key}}</i></p> -->
+                                <p>
+                                    Last updated:
+                                    <b class="service-last-updated">unknown</b>
+                                    <small>(locally updated at <span class="service-last-updated-client">never</span>)</small>
+                                    <br>
+                                    <span class="service-additional-data"></span>
+                                </p>
 
-            <a href="#!" class="secondary-content refresh-service" data-service="{{@key}}">
-                <i class="material-icons">refresh</i>
-            </a>
+                                <a href="#!"
+                                   class="secondary-content refresh-service"
+                                   data-category="{{@key}}"
+                                   data-service="{{@key}}">
+                                    <i class="material-icons">refresh</i>
+                                </a>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </div>
         </li>
     {{/each}}
 </ul>

@@ -23,6 +23,7 @@ const ServiceChecker = {
         ServiceChecker.services = services;
         Object.keys(services).map((key, index) => {
             let service = services[key];
+            if (!service.enabled) return;
 
             debug(`Initializing Service Checker Interval for ${key}`);
             ServiceChecker.checkServiceInterval(key);
@@ -133,6 +134,7 @@ const ServiceChecker = {
         ps.lookup({
             command: service.process,
             arguments: service.arguments,
+            psargs: 'aux'  // or else can't find processes which don't belong to the executing user
         }, (err, result) => {
             if (err) {
                 debug(`${service.name}: Service unavailable due to an error`);
@@ -155,7 +157,7 @@ const ServiceChecker = {
         ping.promise.probe(service.host, { timeout: (service.timeout / 1000) || 10 })
             .then((response) => {
                 debug(`${service.name}: Ping response: Alive=${response.alive}, AvgTime=${response.avg}ms`);
-                if (callback) callback(null, 'success', response);
+                if (callback) callback(null, (response.avg > service.warningTimeout) ? 'warning' : 'success', response);
             }).catch((err) => {
                 if (callback) callback(err, 'error');
             });

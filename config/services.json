@@ -5,28 +5,32 @@
     "enabled": true,
     "url": "http://youtube.com",
     "interval": 120000,
-    "warningTimeout": 400
+    "warningTimeout": 400,
+    "category": "default"
   },
   "googlechrome": {
     "name": "Google Chrome",
     "type": "process",
-    "enabled": true,
+    "enabled": false,
     "process": "chrome",
-    "interval": 30000
+    "interval": 30000,
+    "category": "ui"
   },
   "mozillafirefox": {
     "name": "Mozilla Firefox",
     "type": "process",
-    "enabled": false,
+    "enabled": true,
     "process": "firefox",
-    "interval": 30000
+    "interval": 30000,
+    "category": "ui"
   },
   "nano": {
     "name": "NANO",
     "type": "process",
     "enabled": true,
     "process": "nano",
-    "interval": 30000
+    "interval": 30000,
+    "category": "terminal"
   },
   "server": {
     "name": "DATA.ge.rgunti.ch",
@@ -34,7 +38,8 @@
     "enabled": "true",
     "host": "192.168.1.250",
     "timeout": 5000,
-    "interval": 15000
+    "interval": 15000,
+    "category": "web"
   },
   "google-dns": {
     "name": "Google DNS",
@@ -42,6 +47,8 @@
     "enabled": "true",
     "host": "8.8.8.8",
     "timeout": 5000,
-    "interval": 15000
+    "warningTimeout": 750,
+    "interval": 15000,
+    "category": "web"
   }
 }
