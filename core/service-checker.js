@@ -13,6 +13,7 @@ const debug = require('debug')('node-system-status:');
 const http = require('http');
 const net = require('net');
 const url = require('url');
+const ps = require('ps-node');
 
 const ServiceChecker = {
     services: {},
@@ -24,6 +25,9 @@ const ServiceChecker = {
         switch (service.type) {
             case "http":
                 ServiceChecker.checkHttpService(service, callback);
+                break;
+            case "process":
+                ServiceChecker.checkProcessService(service, callback);
                 break;
             default:
                 debug(`${service.name}: Service Type ${service.type} not implemented`);
@@ -53,6 +57,28 @@ const ServiceChecker = {
         } catch (err) {
             if (callback) callback(err);
         }
+    },
+    checkProcessService: (service, callback) => {
+        ps.lookup({
+            command: service.process,
+            arguments: service.arguments,
+        }, (err, result) => {
+            if (err) {
+                debug(`${service.name}: Service unavailable due to an error`);
+                if (callback) callback(err);
+                return;
+            } else if (result.length === 0) {
+                debug(`${service.name}: Service unavailable`);
+                if (callback) callback('Empty');
+                return;
+            }
+            result.forEach((p) => {
+                if (p) {
+                    debug(`${service.name}: Process found: PID=${p.pid}, ${p.command} ${p.arguments}`)
+                }
+            });
+            if (callback) callback(null);
+        });
     }
 };
 

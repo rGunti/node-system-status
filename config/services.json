@@ -14,13 +14,13 @@
   "mozillafirefox": {
     "name": "Mozilla Firefox",
     "type": "process",
-    "enabled": true,
+    "enabled": false,
     "process": "firefox"
   },
-  "postgresql": {
-    "name": "PostgeSQL",
-    "type": "service",
+  "nano": {
+    "name": "NANO",
+    "type": "process",
     "enabled": true,
-    "service": "postgresql-x64-9.6"
+    "process": "nano"
   }
 }
