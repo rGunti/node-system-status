@@ -29,7 +29,7 @@ router.get('/', function(req, res) {
         servicesByCategory[serviceCategoryID].services[serviceKey] = service;
     }
 
-    HandleRender.render(res, 'index', 'System Status', {
+    HandleRender.render(res, 'index', 'Status', {
         services: services,
         servicesByCategory: servicesByCategory,
         categories: categories
