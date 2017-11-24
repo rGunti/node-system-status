@@ -8,3 +8,8 @@ body > .container {
 .collapsible-body {
     padding: 0;
 }
+.side-nav-text {
+    font-weight: normal !important;
+    height: auto !important;
+    line-height: 1.25em !important;
+}
