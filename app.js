@@ -38,6 +38,7 @@ app.use('/public', express.static(path.join(__dirname, 'node_modules/font-awesom
 app.use('/public/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 app.use('/public/css', express.static(path.join(__dirname, 'node_modules/material-design-icons-iconfont/dist')));
 app.use('/public/js', express.static(path.join(__dirname, 'node_modules/moment/min')));
+app.use('/public/js', express.static(path.join(__dirname, 'node_modules/pulltorefreshjs/dist')));
 
 app.use('/', index);
 

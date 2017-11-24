@@ -17,12 +17,18 @@ function setStatus(serviceLine, serviceData) {
     statusIndicator.addClass(STATUS_INDICATOR_CLASSES[serviceData.status]);
 
     let lastUpdatedField = $('.service-last-updated', serviceLine);
-    let lastUpdated = moment(serviceData.lastUpdated);
-    if (lastUpdated.isValid()) {
-        lastUpdatedField.text(lastUpdated.format('DD.MM.YYYY HH:mm:ss'));
-    } else {
-        lastUpdatedField.text(serviceData.lastUpdated);
+    if (serviceData.lastUpdated) {
+        let lastUpdated = moment(serviceData.lastUpdated);
+        if (lastUpdated.isValid()) {
+            lastUpdatedField.text(lastUpdated.format('L LTS'));
+        } else {
+            lastUpdatedField.text(serviceData.lastUpdated);
+        }
     }
+
+    let lastClientUpdatedField = $('.service-last-updated-client', serviceLine);
+    if (serviceData.status !== 'loading')
+        lastClientUpdatedField.text(moment().format('L LTS'));
 
     let additionalData = $('.service-additional-data', serviceLine);
     if (serviceData.status === 'loading') {
@@ -54,7 +60,7 @@ function setStatus(serviceLine, serviceData) {
 
 function checkService(service) {
     let statusIndicator = $('#service-' + service);
-    setStatus(statusIndicator, {status: 'loading', lastUpdated: '...'});
+    setStatus(statusIndicator, {status: 'loading'});
     $.ajax('/service/' + service + '/check')
         .done(function(d) {
             console.log(d);
@@ -76,11 +82,27 @@ function checkAllServices() {
 }
 
 $(document).ready(function() {
+    moment.locale(window.navigator.userLanguage || window.navigator.language);
+
     $('.button-collapse').sideNav();
     $('.refresh-service').click(function(e) {
         let service = $(e.currentTarget).data('service');
         checkService(service);
     });
+    $('.refresh-button').click(function(e) {
+        checkAllServices();
+        $('.button-collapse').sideNav('hide');
+    });
+    $('.refresh-service').hide();
+    PullToRefresh.init({
+        mainElement: 'body',
+        iconArrow: '<span class="fa fa-fw fa-arrow-down"></span>',
+        iconRefreshing: '<span class="fa fa-fw fa-hourglass-half"></span>',
+        refreshTimeout: 1000,
+        onRefresh: function() {
+            checkAllServices();
+        }
+    });
+
     checkAllServices();
-    setInterval(checkAllServices, 10000);
 });
