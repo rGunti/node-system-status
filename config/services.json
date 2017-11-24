@@ -27,5 +27,21 @@
     "enabled": true,
     "process": "nano",
     "interval": 30000
+  },
+  "server": {
+    "name": "DATA.ge.rgunti.ch",
+    "type": "ping",
+    "enabled": "true",
+    "host": "192.168.1.250",
+    "timeout": 5000,
+    "interval": 15000
+  },
+  "google-dns": {
+    "name": "Google DNS",
+    "type": "ping",
+    "enabled": "true",
+    "host": "8.8.8.8",
+    "timeout": 5000,
+    "interval": 15000
   }
 }

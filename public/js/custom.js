@@ -17,19 +17,31 @@ function setStatus(serviceLine, serviceData) {
     statusIndicator.addClass(STATUS_INDICATOR_CLASSES[serviceData.status]);
 
     let lastUpdatedField = $('.service-last-updated', serviceLine);
-    lastUpdatedField.text(serviceData.lastUpdated);
-
-    if (serviceData.status === 'loading') return;
+    let lastUpdated = moment(serviceData.lastUpdated);
+    if (lastUpdated.isValid()) {
+        lastUpdatedField.text(lastUpdated.format('DD.MM.YYYY HH:mm:ss'));
+    } else {
+        lastUpdatedField.text(serviceData.lastUpdated);
+    }
 
     let additionalData = $('.service-additional-data', serviceLine);
-    if (serviceData.service) {
+    if (serviceData.status === 'loading') {
+        return;
+    } else if (serviceData.service) {
         additionalData.show();
         switch (serviceData.service.type) {
             case "http":
                 if (serviceData.data.timeTaken)
                     additionalData.text('Request time: ' + serviceData.data.timeTaken + ' ms');
                 else
-                    additionalData.text('');
+                    additionalData.text('...');
+                break;
+            case "ping":
+                if (serviceData.data) {
+                    additionalData.text('Average Ping: ' + Math.round(serviceData.data.avg) + ' ms');
+                } else {
+                    additionalData.text('...');
+                }
                 break;
             default:
                 additionalData.hide();

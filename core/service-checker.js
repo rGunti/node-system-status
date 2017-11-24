@@ -14,14 +14,13 @@ const http = require('http');
 const net = require('net');
 const url = require('url');
 const ps = require('ps-node');
+const ping = require('ping');
 
 const ServiceChecker = {
     services: {},
     results: {},
     init: (services) => {
         ServiceChecker.services = services;
-        ServiceChecker.checkAllServices();
-
         Object.keys(services).map((key, index) => {
             let service = services[key];
 
@@ -50,7 +49,7 @@ const ServiceChecker = {
                     data: data,
                     lastUpdated: new Date()
                 };
-                ServiceChecker.results[key] = serviceData;
+                ServiceChecker.results[serviceName] = serviceData;
                 if (callback) callback(serviceData);
             });
         } else {
@@ -95,6 +94,9 @@ const ServiceChecker = {
                 break;
             case "process":
                 ServiceChecker.checkProcessService(service, callback);
+                break;
+            case "ping":
+                ServiceChecker.checkPingService(service, callback);
                 break;
             default:
                 debug(`${service.name}: Service Type ${service.type} not implemented`);
@@ -148,6 +150,15 @@ const ServiceChecker = {
             });
             if (callback) callback(null, 'success');
         });
+    },
+    checkPingService: (service, callback) => {
+        ping.promise.probe(service.host, { timeout: (service.timeout / 1000) || 10 })
+            .then((response) => {
+                debug(`${service.name}: Ping response: Alive=${response.alive}, AvgTime=${response.avg}ms`);
+                if (callback) callback(null, 'success', response);
+            }).catch((err) => {
+                if (callback) callback(err, 'error');
+            });
     }
 };
 

@@ -37,6 +37,7 @@ app.use('/public', express.static(path.join(__dirname, 'node_modules/materialize
 app.use('/public', express.static(path.join(__dirname, 'node_modules/font-awesome')));
 app.use('/public/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 app.use('/public/css', express.static(path.join(__dirname, 'node_modules/material-design-icons-iconfont/dist')));
+app.use('/public/js', express.static(path.join(__dirname, 'node_modules/moment/min')));
 
 app.use('/', index);
 
