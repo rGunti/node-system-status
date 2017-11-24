@@ -23,6 +23,7 @@ const ServiceChecker = {
         ServiceChecker.services = services;
         Object.keys(services).map((key, index) => {
             let service = services[key];
+            if (!service.enabled) return;
 
             debug(`Initializing Service Checker Interval for ${key}`);
             ServiceChecker.checkServiceInterval(key);
