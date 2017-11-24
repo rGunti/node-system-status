@@ -3,24 +3,29 @@
     "name": "YouTube",
     "type": "http",
     "enabled": true,
-    "url": "http://youtube.com"
+    "url": "http://youtube.com",
+    "interval": 120000,
+    "warningTimeout": 400
   },
   "googlechrome": {
     "name": "Google Chrome",
     "type": "process",
     "enabled": true,
-    "process": "chrome"
+    "process": "chrome",
+    "interval": 1000
   },
   "mozillafirefox": {
     "name": "Mozilla Firefox",
     "type": "process",
     "enabled": false,
-    "process": "firefox"
+    "process": "firefox",
+    "interval": 1000
   },
   "nano": {
     "name": "NANO",
     "type": "process",
     "enabled": true,
-    "process": "nano"
+    "process": "nano",
+    "interval": 1000
   }
 }

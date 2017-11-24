@@ -20,19 +20,23 @@ router.get('/service/:service/check', (req, res) => {
             return res.json({
                 ok: true,
                 error: null,
-                status: 'disabled'
+                status: 'disabled',
+                data: null,
+                lastUpdated: 'never',
+                service: service
             })
-        }
-        ServiceChecker.checkService(
-            service,
-            (error) => {
+        } else {
+            ServiceChecker.getServiceStatus(serviceName, (data) => {
                 res.json({
                     ok: true,
-                    error: error,
-                    status: (error === null ? 'success' : 'error')
+                    error: data.error,
+                    status: data.status,
+                    data: data.data,
+                    lastUpdated: data.lastUpdated,
+                    service: service
                 });
-            }
-        );
+            });
+        }
     } else {
         res.status(404);
         return res.json({ ok: false })

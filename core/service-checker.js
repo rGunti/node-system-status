@@ -9,7 +9,7 @@
  *
  */
 
-const debug = require('debug')('node-system-status:');
+const debug = require('debug')('node-system-status:ServiceChecker');
 const http = require('http');
 const net = require('net');
 const url = require('url');
@@ -17,8 +17,75 @@ const ps = require('ps-node');
 
 const ServiceChecker = {
     services: {},
+    results: {},
     init: (services) => {
-        ServiceChecker.services = services
+        ServiceChecker.services = services;
+        ServiceChecker.checkAllServices();
+
+        Object.keys(services).map((key, index) => {
+            let service = services[key];
+
+            debug(`Initializing Service Checker Interval for ${key}`);
+            ServiceChecker.checkServiceInterval(key);
+
+            setInterval(() => {
+                debug(`Checking Service '${key}' now ...`);
+                ServiceChecker.checkServiceInterval(key);
+            }, service.interval || 60000);
+        });
+    },
+    getServiceStatus: (serviceName, callback) => {
+        let serviceExists = (serviceName in ServiceChecker.services);
+        let cachedResultExists = (serviceName in ServiceChecker.results);
+
+        let result = null;
+        if (serviceExists && cachedResultExists) {
+            result = ServiceChecker.results[serviceName];
+        } else if (serviceExists) {
+            let service = ServiceChecker.services[serviceName];
+            return ServiceChecker.checkService(service, (error, status, data) => {
+                let serviceData = {
+                    error: error,
+                    status: status,
+                    data: data,
+                    lastUpdated: new Date()
+                };
+                ServiceChecker.results[key] = serviceData;
+                if (callback) callback(serviceData);
+            });
+        } else {
+            result = {
+                error: 'Invalid Service',
+                status: 'unknown',
+                data: data,
+                lastUpdated: new Date()
+            }
+        }
+        if (callback) callback(result);
+    },
+    checkAllServices: () => {
+        Object.keys(ServiceChecker.services).map((key, index) => {
+            let service = ServiceChecker.services[key];
+            ServiceChecker.checkService(service, (error, status, data) => {
+                ServiceChecker.results[key] = {
+                    error: error,
+                    status: status,
+                    data: data,
+                    lastUpdated: new Date()
+                }
+            });
+        });
+    },
+    checkServiceInterval: (key) => {
+        let service = ServiceChecker.services[key];
+        ServiceChecker.checkService(service, (error, status, data) => {
+            ServiceChecker.results[key] = {
+                error: error,
+                status: status,
+                data: data,
+                lastUpdated: new Date()
+            }
+        });
     },
     checkService: (service, callback) => {
         debug(`${service.name}: Checking service ...`);
@@ -38,24 +105,26 @@ const ServiceChecker = {
     checkHttpService: (service, callback) => {
         let srvUrl = url.parse(service.url);
         try {
+            let startDate = new Date();
             let request = http.get({
                 host: srvUrl.hostname,
                 path: srvUrl.path
             }, (r) => {
-                debug(`${service.name}: Service is available`);
-                if (callback) callback(null);
+                let timeTaken = new Date() - startDate;
+                debug(`${service.name}: Service is available, took ${timeTaken} ms`);
+                if (callback) callback(null, (timeTaken > (service.warningTimeout || 5000)) ? 'warning' : 'success', { timeTaken: timeTaken });
             }).on('end', (e) => {
                 debug(`${service.name}: Service could not be reached`);
                 console.log(e);
-                if (callback) callback(e);
+                if (callback) callback(e, 'error');
             });
             request.on('error', (e) => {
                 debug(`${service.name}: Service could not be reached`);
                 console.log(e);
-                if (callback) callback(e);
+                if (callback) callback(e, 'error');
             })
         } catch (err) {
-            if (callback) callback(err);
+            if (callback) callback(err, 'error');
         }
     },
     checkProcessService: (service, callback) => {
@@ -65,11 +134,11 @@ const ServiceChecker = {
         }, (err, result) => {
             if (err) {
                 debug(`${service.name}: Service unavailable due to an error`);
-                if (callback) callback(err);
+                if (callback) callback(err, 'error');
                 return;
             } else if (result.length === 0) {
                 debug(`${service.name}: Service unavailable`);
-                if (callback) callback('Empty');
+                if (callback) callback('Empty', 'error');
                 return;
             }
             result.forEach((p) => {
@@ -77,7 +146,7 @@ const ServiceChecker = {
                     debug(`${service.name}: Process found: PID=${p.pid}, ${p.command} ${p.arguments}`)
                 }
             });
-            if (callback) callback(null);
+            if (callback) callback(null, 'success');
         });
     }
 };

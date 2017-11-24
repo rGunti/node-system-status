@@ -11,22 +11,53 @@ const STATUS_INDICATOR_CLASSES = {
     'unknown': 'circle fa fa-question'
 };
 
-function setStatus(statusIndicator, status) {
+function setStatus(serviceLine, serviceData) {
+    let statusIndicator = $('.circle', serviceLine);
     statusIndicator.removeClass();
-    statusIndicator.addClass(STATUS_INDICATOR_CLASSES[status]);
+    statusIndicator.addClass(STATUS_INDICATOR_CLASSES[serviceData.status]);
+
+    let lastUpdatedField = $('.service-last-updated', serviceLine);
+    lastUpdatedField.text(serviceData.lastUpdated);
+
+    if (serviceData.status === 'loading') return;
+
+    let additionalData = $('.service-additional-data', serviceLine);
+    if (serviceData.service) {
+        additionalData.show();
+        switch (serviceData.service.type) {
+            case "http":
+                additionalData.text('Request time: ' + serviceData.data.timeTaken + ' ms');
+                break;
+            default:
+                additionalData.hide();
+                break;
+        }
+    } else {
+        additionalData.hide();
+    }
 }
 
 function checkService(service) {
-    let statusIndicator = $('#service-' + service + ' .circle');
-    setStatus(statusIndicator, 'loading');
+    let statusIndicator = $('#service-' + service);
+    setStatus(statusIndicator, {status: 'loading', lastUpdated: '...'});
     $.ajax('/service/' + service + '/check')
         .done(function(d) {
             console.log(d);
-            setStatus(statusIndicator, d.status);
+            setStatus(statusIndicator, d);
         }).fail(function(e) {
             console.log(e);
-            setStatus(statusIndicator, 'unknown');
+            setStatus(statusIndicator, {
+                status: 'unknown',
+                lastUpdated: new Date(),
+                service: null
+            });
         });
+}
+
+function checkAllServices() {
+    $('.services a.refresh-service').each(function(i, l) {
+        checkService($(l).data('service'));
+    });
 }
 
 $(document).ready(function() {
@@ -35,7 +66,6 @@ $(document).ready(function() {
         let service = $(e.currentTarget).data('service');
         checkService(service);
     });
-    $('.services a.refresh-service').each(function(i, l) {
-        checkService($(l).data('service'));
-    });
+    checkAllServices();
+    setInterval(checkAllServices, 10000);
 });
