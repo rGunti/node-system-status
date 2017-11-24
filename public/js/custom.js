@@ -26,7 +26,10 @@ function setStatus(serviceLine, serviceData) {
         additionalData.show();
         switch (serviceData.service.type) {
             case "http":
-                additionalData.text('Request time: ' + serviceData.data.timeTaken + ' ms');
+                if (serviceData.data.timeTaken)
+                    additionalData.text('Request time: ' + serviceData.data.timeTaken + ' ms');
+                else
+                    additionalData.text('');
                 break;
             default:
                 additionalData.hide();
