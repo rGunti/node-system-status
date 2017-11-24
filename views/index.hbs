@@ -1,5 +1,7 @@
 <ul class="collapsible" data-collapsible="accordion">
     {{#each data.servicesByCategory}}
+        {{#isEmpty this.services}}
+        {{else}}
         <li>
             <div class="collapsible-header indigo lighten-4">
                 {{#if this.category.icon}}
@@ -42,5 +44,6 @@
                 {{/if}}
             </div>
         </li>
+        {{/isEmpty}}
     {{/each}}
 </ul>
