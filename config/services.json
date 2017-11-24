@@ -12,20 +12,20 @@
     "type": "process",
     "enabled": true,
     "process": "chrome",
-    "interval": 1000
+    "interval": 30000
   },
   "mozillafirefox": {
     "name": "Mozilla Firefox",
     "type": "process",
     "enabled": false,
     "process": "firefox",
-    "interval": 1000
+    "interval": 30000
   },
   "nano": {
     "name": "NANO",
     "type": "process",
     "enabled": true,
     "process": "nano",
-    "interval": 1000
+    "interval": 30000
   }
 }
